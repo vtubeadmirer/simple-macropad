@@ -9,6 +9,8 @@ try {
  if($release.tag_name -notmatch '^v(\d+\.\d+\.\d+)$'){throw '올바르지 않은 버전입니다.'}
  $version=[version]($Matches[1]+'.0')
  $current=[version](Get-Item -LiteralPath $CurrentExe).VersionInfo.FileVersion
+ # Migrate the former major-version numbering to 0.x without blocking updates.
+ if($current.Major -ge 1 -and $version.Major -eq 0){$current=[version]'0.0.0.0'}
  if($version -le $current){[Windows.Forms.MessageBox]::Show('이미 최신 버전입니다.','키패드 업데이트')|Out-Null}
  else {
   $zipAsset=$release.assets|Where-Object name -eq 'SimpleMacroPad-win-x64.zip'

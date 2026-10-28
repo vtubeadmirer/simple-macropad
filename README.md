@@ -30,14 +30,14 @@ Windows의 .NET Framework C# 컴파일러를 사용합니다. 빌드 시 NuGet�
 
 `ui.html`은 기본 화면, `direct.js`는 직접 편집/글씨 크기, `hardware.js`와 `hardware-codec.js`는 장치 UI 및 직렬화, `Hardware.cs`는 HID 통신, `Keypad.cs`는 Windows 호스트입니다.
 
-`main`에 push하면 GitHub Actions가 빌드합니다. `Keypad.cs`의 버전과 네이티브 테스트 버전 문자열을 함께 바꾼 후 `v10.0.0` 같은 태그를 push하면 ZIP과 체크섬을 Release로 게시합니다.
+`main`에 push하면 GitHub Actions가 빌드합니다. `Keypad.cs`의 버전과 네이티브 테스트 버전 문자열을 함께 바꾼 후 `v0.10.0` 같은 태그를 push하면 ZIP과 체크섬을 Release로 게시합니다.
 
 ```sh
 git add .
 git commit -m "Describe the change"
 git push
-git tag v10.0.0
-git push origin v10.0.0
+git tag v0.10.0
+git push origin v0.10.0
 ```
 
 프로필 전환 및 조명 편집은 아직 지원하지 않습니다. 다른 기종에는 적용하지 마세요.

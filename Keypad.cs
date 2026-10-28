@@ -10,8 +10,8 @@ using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
-[assembly:System.Reflection.AssemblyVersion("10.0.0.0")]
-[assembly:System.Reflection.AssemblyFileVersion("10.0.0.0")]
+[assembly:System.Reflection.AssemblyVersion("0.10.0.0")]
+[assembly:System.Reflection.AssemblyFileVersion("0.10.0.0")]
 
 namespace KeypadDesktop {
  public class Entry { public string name=""; public string key=""; public string[] mods=new string[0]; public string signal=""; public string source=""; public int[] raw;public string rawCombo=""; }
@@ -27,7 +27,7 @@ namespace KeypadDesktop {
   readonly Dictionary<IntPtr,HashSet<int>> held=new Dictionary<IntPtr,HashSet<int>>();
   State state=new State();Timer scan;bool ready,closing,test;RawWindow raw;DateTime captureUntil=DateTime.MinValue;
   IntPtr keyboardHook=IntPtr.Zero;HookProc hookProc;readonly HashSet<int> hookHeld=new HashSet<int>();
-  const string AppVersion="10.0";bool failNextSave,hardwareBusy;
+  const string AppVersion="0.10.0";bool failNextSave,hardwareBusy;
   string Profile {get{return Path.Combine(dataDir,"profile.json");}}
   public App(bool testing){test=testing;if(test)dataDir=Path.Combine(Path.GetTempPath(),"opencode","KeypadTest-"+Guid.NewGuid().ToString("N"));Text="키패드 v"+AppVersion;ClientSize=new Size(1180,940);MinimumSize=new Size(900,720);StartPosition=FormStartPosition.CenterScreen;BackColor=Color.FromArgb(245,245,243);web.Dock=DockStyle.Fill;Controls.Add(web);Shown+=async delegate{await Start();};Deactivate+=delegate{if(!CaptureArmed)held.Clear();};FormClosing+=OnClosing;}
   async System.Threading.Tasks.Task Start(){try{
@@ -119,7 +119,7 @@ namespace KeypadDesktop {
    await web.ExecuteScriptAsync("document.querySelector('#save').click()");await System.Threading.Tasks.Task.Delay(500);
    if(json.Deserialize<State>(File.ReadAllText(Profile)).entries[0].name!="retry-test")throw new Exception("Retry persistence failed");
    await web.ExecuteScriptAsync("draft={source:entries[selected].source,key:entries[selected].key,mods:[...entries[selected].mods].reverse(),name:entries[selected].name,signal:entries[selected].signal};renderEditor()");
-     if(await web.ExecuteScriptAsync("!dirty()&&document.querySelector('#save').disabled&&document.querySelector('#app-version').textContent==='v10.0'")!="true")throw new Exception("Version or semantic equality test failed");
+     if(await web.ExecuteScriptAsync("!dirty()&&document.querySelector('#save').disabled&&document.querySelector('#app-version').textContent==='v0.10.0'")!="true")throw new Exception("Version or semantic equality test failed");
    await web.ExecuteScriptAsync("macroLists=Array.from({length:32},()=>[]);macroLists[2]=[{type:2,code:4,down:true,delay:10},{type:2,code:4,down:false,delay:20}];macroChanged();draft.raw=[32,0,4,0];draft.rawCombo=PC.signature(draft);document.querySelector('#macro-save').click()");await System.Threading.Tasks.Task.Delay(500);
    disk=json.Deserialize<State>(File.ReadAllText(Profile));if(disk.macroDraft==null||disk.macroDraft.Length!=4096||disk.macroDraft[4]!=64||disk.macroDraft[66]!=66||disk.macroDraft[70]!=130||disk.entries[0].raw==null||disk.entries[0].raw[0]!=32)throw new Exception("Macro/raw persistence failed");
    string result=await web.ExecuteScriptAsync("({version:document.querySelector('#app-version').textContent,keys:document.querySelectorAll('.pad-key').length,knobs:document.querySelectorAll('.knob-action').length,ready:desktopReady,connected:document.querySelector('#device-status').textContent,theme:document.documentElement.dataset.theme,saved:lastSaved===saveSequence,wizardSteps:scanIndex,detected:scanChanged.size,closed:!wizard.open,saveRetryTest:true,manualPresetTest:true})");
