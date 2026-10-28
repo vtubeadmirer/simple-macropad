@@ -26,7 +26,9 @@ $bridge+=[Environment]::NewLine+[IO.File]::ReadAllText((Join-Path $PSScriptRoot 
 $html=$html.Replace('</body>',('<script>'+$bridge+'</script></body>'))
 [IO.File]::WriteAllText((Join-Path $out 'index.html'),$html,[Text.Encoding]::UTF8)
 $compiler=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
-Copy-Item (Get-ChildItem "$hid\lib" -Recurse -Filter HidLibrary.dll|Select-Object -First 1).FullName $out
+Copy-Item "$hid\lib\net45\HidLibrary.dll" $out
+Copy-Item "$sdk\LICENSE.txt" (Join-Path $out 'WebView2-LICENSE.txt')
 Copy-Item "$PSScriptRoot\Update.ps1" $out
+Copy-Item "$PSScriptRoot\HidLibrary-LICENSE.txt" $out
 & $compiler /nologo /target:winexe /platform:x64 /optimize+ /out:"$out\Keypad.exe" /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.Web.Extensions.dll /reference:System.Xml.Linq.dll /reference:"$out\HidLibrary.dll" /reference:"$out\Microsoft.Web.WebView2.Core.dll" /reference:"$out\Microsoft.Web.WebView2.WinForms.dll" "$PSScriptRoot\Keypad.cs" "$PSScriptRoot\Hardware.cs"
 if($LASTEXITCODE -ne 0){throw 'Build failed'}
