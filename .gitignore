@@ -1,0 +1,9 @@
+dist/
+.packages/
+*.dll
+*.png
+update-settings.json
+desktop-test.json
+DeviceBackups/
+profile.json*
+*.zip
