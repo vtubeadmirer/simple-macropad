@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$CurrentExe,[int]$AppProcessId)
+﻿param([Parameter(Mandatory=$true)][string]$CurrentExe,[int]$AppProcessId)
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Windows.Forms
 [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
